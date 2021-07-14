@@ -5,10 +5,11 @@ import com.internship.sbproject1.dto.ResponseUserDto;
 import com.internship.sbproject1.entity.User;
 import com.internship.sbproject1.entity.UserSkill;
 import com.internship.sbproject1.service.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -22,9 +23,9 @@ public class UserController {
     }
 
     @GetMapping
-    public Object getUsers(@RequestParam(defaultValue = "0") Integer page,
-                         @RequestParam(defaultValue = "10") Integer size,
-                         @RequestParam(defaultValue = "id") String sortOrder
+    public Page<User> getUsers(@RequestParam(defaultValue = "0") Integer page,
+                               @RequestParam(defaultValue = "10") Integer size,
+                               @RequestParam(defaultValue = "id") String sortOrder
     ) {
         return userService.getUsers(page, size, sortOrder);
     }
@@ -36,13 +37,13 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseUserDto registerNewUser(@RequestBody @Validated RequestUserDto user) {
-        return userService.addNewUser(user);
+    public ResponseUserDto saveUser(@RequestBody @Valid RequestUserDto user) {
+        return userService.saveUser(user);
     }
 
 
     @PutMapping(path = "{userId}")
-    public ResponseUserDto updateStudent(@PathVariable("userId") Long userId, @RequestBody @Validated RequestUserDto userToUpdate) {
+    public ResponseUserDto updateUser(@PathVariable("userId") Long userId, @RequestBody @Valid RequestUserDto userToUpdate) {
         return userService.updateUser(userId,  userToUpdate.getFullName(),  userToUpdate.getEmail(), userToUpdate.getGender(), userToUpdate.getUserRole());
     }
 
@@ -52,7 +53,7 @@ public class UserController {
         return userService.getUserSkills(userId);
     }
 
-    @PostMapping(path = "{userId}/addskill/{skillId}")
+    @PostMapping(path = "{userId}/skills/{skillId}")
     public User addSkillToUser(@PathVariable("userId") Long userId, @PathVariable("userId") Long skillId) {
         return  userService.addSkillToUser(userId, skillId);
     }

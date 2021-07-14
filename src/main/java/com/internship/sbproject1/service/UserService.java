@@ -8,6 +8,7 @@ import com.internship.sbproject1.entity.UserSkill;
 import com.internship.sbproject1.repository.SkillRepository;
 import com.internship.sbproject1.repository.UserRepository;
 import com.internship.sbproject1.entity.UserRole;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,32 +25,26 @@ import java.util.stream.Collectors;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    private UserRepository userRepository;
-    private SkillRepository skillRepository;
-    private ModelMapper mapper;
-
-    @Autowired
-    public UserService(UserRepository userRepository, SkillRepository skillRepository, ModelMapper mapper) {
-        this.userRepository = userRepository;
-        this.skillRepository = skillRepository;
-        this.mapper = mapper;
-    }
+    private final UserRepository userRepository;
+    private final SkillRepository skillRepository;
+    private final ModelMapper mapper;
 
     public ResponseUserDto findUserById(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User with id " + userId + " was not found"));
         return toResponseDto(user);
     }
 
-    public Object getUsers(Integer pageNo, Integer pageSize, String sortBy) {
+    public Page<User> getUsers(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         // TODO: Use response DTO here
         Page<User> pagedResult = userRepository.findAll(paging);
         return pagedResult;
     }
 
-    public ResponseUserDto addNewUser(RequestUserDto userFromRequest) {
+    public ResponseUserDto saveUser(RequestUserDto userFromRequest) {
         Optional<User> studentByEmail =  userRepository.findUserByEmail(userFromRequest.getEmail());
         if(studentByEmail.isPresent()) {
             throw new IllegalStateException("Your email is already used!");
