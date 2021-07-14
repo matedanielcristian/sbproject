@@ -21,5 +21,11 @@ services:
     volumes:
       - my-db:/var/lib/mysql
 # Names our volume
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: db
 volumes:
   my-db:
