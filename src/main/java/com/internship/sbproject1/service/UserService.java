@@ -30,7 +30,6 @@ public class UserService {
 
     public Page<User> getUsers(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        // TODO: Use response DTO here
         return userRepository.findAll(paging);
     }
 

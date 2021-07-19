@@ -43,8 +43,8 @@ public class UserControllerTest extends TestCreationFactory {
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private String USERs_URL = "/api/v1/users";
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final String USERs_URL = "/api/v1/users";
 
     public User user = this.getUser();
     public ResponseUserDto responseUserDto = this.getResponseUserDto();

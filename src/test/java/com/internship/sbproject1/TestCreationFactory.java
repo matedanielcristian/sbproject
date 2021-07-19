@@ -8,13 +8,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Random;
 public abstract class TestCreationFactory {
-    private Random random = new Random();
-    private Long id =  1L;
-    private String email = "test@test.com";
-    private String fullName = "Test FullName";
-    private UserRole userRole = UserRole.USER;
-    private int gender = 1;
-    private String password = "123456";
+    private final Random random = new Random();
+    private final Long id =  1L;
+    private final String email = "test@test.com";
+    private final String fullName = "Test FullName";
+    private final UserRole userRole = UserRole.USER;
+    private final int gender = 1;
+    private final String password = "123456";
 
 
     public ResponseUserDto getResponseUserDto() {
@@ -22,11 +22,11 @@ public abstract class TestCreationFactory {
     }
 
     public RequestUserDto getRequestUserDto() {
-        return new RequestUserDto(id, fullName, email, UserRole.USER, 1, password);
+        return new RequestUserDto(id, fullName, email, UserRole.USER, gender, password);
     }
 
     public User getUser() {
-        return new User(id, fullName, email,userRole, 1, password);
+        return new User(id, fullName, email,userRole, gender, password);
     }
 
 
