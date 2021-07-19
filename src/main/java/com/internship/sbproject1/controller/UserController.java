@@ -48,15 +48,15 @@ public class UserController {
     }
 
 
-    @GetMapping(path = "{userId}/skills")
-    public List<UserSkill> getUserSkills(@PathVariable("userId") Long userId) {
-        return userService.getUserSkills(userId);
-    }
+//    @GetMapping(path = "{userId}/skills")
+//    public List<UserSkill> getUserSkills(@PathVariable("userId") Long userId) {
+//        return userService.getUserSkills(userId);
+//    }
 
-    @PostMapping(path = "{userId}/skills/{skillId}")
-    public User addSkillToUser(@PathVariable("userId") Long userId, @PathVariable("userId") Long skillId) {
-        return  userService.addSkillToUser(userId, skillId);
-    }
+//    @PostMapping(path = "{userId}/skills/{skillId}")
+//    public User addSkillToUser(@PathVariable("userId") Long userId, @PathVariable("userId") Long skillId) {
+//        return  userService.addSkillToUser(userId, skillId);
+//    }
 
     @DeleteMapping(path = "{userId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
