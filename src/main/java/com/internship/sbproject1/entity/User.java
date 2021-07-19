@@ -35,7 +35,7 @@ public class User {
     @Column(nullable = false)
     @NotNull
     private String email;
-
+    
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private UserRole userRole;
