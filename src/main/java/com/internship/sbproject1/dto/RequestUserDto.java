@@ -3,24 +3,22 @@ package com.internship.sbproject1.dto;
 
 import com.internship.sbproject1.entity.UserRole;
 import com.sun.istack.NotNull;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class RequestUserDto {
-    private long id;
+    private Long id;
     @NotNull
     private String fullName;
     @NotNull
     private String email;
     @NotNull
-    private int gender;
-    @NotNull
     private UserRole userRole;
+    @NotNull
+    private int gender;
     private String password;
 }
