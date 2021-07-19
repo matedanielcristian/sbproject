@@ -5,13 +5,10 @@ import com.internship.sbproject1.dto.ResponseUserDto;
 import com.internship.sbproject1.entity.User;
 import com.internship.sbproject1.service.UserService;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.xml.ws.Response;
-import java.util.List;
 
 @CrossOrigin
 @RestController

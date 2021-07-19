@@ -6,7 +6,6 @@ import com.internship.sbproject1.entity.User;
 import com.internship.sbproject1.entity.UserRole;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.security.SecureRandom;
 import java.util.Random;
 public abstract class TestCreationFactory {
     private Random random = new Random();
