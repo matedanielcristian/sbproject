@@ -1,16 +1,11 @@
 package com.internship.sbproject1.service;
 
 import com.internship.sbproject1.dto.RequestUserDto;
-import com.internship.sbproject1.entity.Skill;
 import com.internship.sbproject1.entity.User;
 import com.internship.sbproject1.dto.ResponseUserDto;
-import com.internship.sbproject1.entity.UserSkill;
-import com.internship.sbproject1.repository.SkillRepository;
 import com.internship.sbproject1.repository.UserRepository;
-import com.internship.sbproject1.entity.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -29,7 +21,6 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final SkillRepository skillRepository;
     private final ModelMapper mapper;
 
     public ResponseUserDto findUserById(Long userId) {
@@ -40,8 +31,7 @@ public class UserService {
     public Page<User> getUsers(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         // TODO: Use response DTO here
-        Page<User> pagedResult = userRepository.findAll(paging);
-        return pagedResult;
+        return userRepository.findAll(paging);
     }
 
     public ResponseUserDto saveUser(RequestUserDto userFromRequest) {
@@ -54,72 +44,60 @@ public class UserService {
         return toResponseDto(user);
     }
 
-    public void deleteUser(Long userId) {
+    public boolean deleteUser(Long userId) {
         boolean exists = userRepository.existsById(userId);
         if(!exists) {
             throw new IllegalStateException("user with id " + userId + " does not exists");
         }
         userRepository.deleteById(userId);
+        return true;
     }
 
-    public ResponseUserDto updateUser(Long userId, String fullName, String email, int gender, UserRole userRole) {
+    public ResponseUserDto updateUser(Long userId, RequestUserDto userToUpdate) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User with id " + userId + " was not found!"));
-        Optional<User> userOptional = userRepository.findUserByEmail(email);
+        Optional<User> userOptional = userRepository.findUserByEmail(userToUpdate.getEmail());
         if(userOptional.isPresent() && userOptional.get().getId() != user.getId()) {
             throw  new IllegalStateException("Email already taken!");
         }
-        user.setEmail(email);
-        user.setFullName(fullName);
-        user.setGender(gender);
-        user.setUserRole(userRole);
+        user.setEmail(userToUpdate.getEmail());
+        user.setFullName(userToUpdate.getFullName());
+        user.setGender(userToUpdate.getGender());
+        user.setUserRole(userToUpdate.getUserRole());
         userRepository.save(user);
         return toResponseDto(user);
     }
 
 
-    public User addSkillToUser(Long userId, Long skillId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User with id " + userId + " was not found!"));
-        Skill skill = skillRepository.findById(skillId).orElseThrow(() -> new IllegalStateException("Skill with id " + skillId + " was not found!"));
-        user.addSkill(skill);
-        return user;
-    }
-
-
-    public List<UserSkill> getUserSkills(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User with id " + userId + " was not found!"));
-        return user.getSkills();
-    }
-
 
     // DTO Response conversions
-    private ResponseUserDto toResponseDto(User user) {
+    public ResponseUserDto toResponseDto(User user) {
         ResponseUserDto responseUserDto = mapper.map(user, ResponseUserDto.class);
         return responseUserDto;
     }
 
-    private List<ResponseUserDto> ListToResponseListDto(List<User> users) {
-        List<ResponseUserDto> dtos = users.stream().map(user -> mapper.map(user, ResponseUserDto.class )).collect(Collectors.toList());
-        return dtos;
-    }
+//    public List<ResponseUserDto> ListToResponseListDto(List<User> users) {
+//        List<ResponseUserDto> dtos = users.stream().map(user -> mapper.map(user, ResponseUserDto.class )).collect(Collectors.toList());
+//        return dtos;
+//    }
 
-    private User ResponseToEntity(ResponseUserDto responseUserDto) {
+    public User ResponseToEntity(ResponseUserDto responseUserDto) {
         User user =  mapper.map(responseUserDto, User.class);
         return user;
     }
 
 
     // DTO Request conversions
-    private RequestUserDto toRequestDto(User user) {
+    public RequestUserDto toRequestDto(User user) {
         RequestUserDto resUserDto = mapper.map(user, RequestUserDto.class);
         return resUserDto;
     }
 
-    private List<RequestUserDto> ListToRequestListDto(List<User> users) {
-        List<RequestUserDto> dtos = users.stream().map(user -> mapper.map(user, RequestUserDto.class )).collect(Collectors.toList());
-        return dtos;
-    }
+//    public List<RequestUserDto> ListToRequestListDto(List<User> users) {
+//        List<RequestUserDto> dtos = users.stream().map(user -> mapper.map(user, RequestUserDto.class )).collect(Collectors.toList());
+//        return dtos;
+//    }
 
-    private User RequestToEntity(RequestUserDto requestUserDto) {
+    public User RequestToEntity(RequestUserDto requestUserDto) {
         User user =  mapper.map(requestUserDto, User.class);
         return user;
     }

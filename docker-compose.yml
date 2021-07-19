@@ -22,7 +22,7 @@ services:
       - my-db:/var/lib/mysql
 # Names our volume
   backend:
-    build: .
+    image: springio/gs-spring-boot-docker:latest
     ports:
       - "8080:8080"
     environment:

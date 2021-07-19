@@ -12,7 +12,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
 @EqualsAndHashCode
 
 @NoArgsConstructor
@@ -36,10 +35,6 @@ public class User {
     @Column(nullable = false)
     @NotNull
     private String email;
-
-    @Column(nullable = false)
-    private String password;
-
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private UserRole userRole;
@@ -48,33 +43,9 @@ public class User {
     private int gender;
 
 
-    @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<UserSkill> skills = new ArrayList<>();
+    @Column(nullable = false)
+    private String password;
 
-    public void addSkill(Skill skill) {
-        UserSkill userSkill = new UserSkill(this, skill);
-        skills.add(userSkill);
-        skill.getUsers().add(userSkill);
-    }
-
-    public void removeSkill(Skill skill) {
-        for (Iterator<UserSkill> iterator = skills.iterator();
-             iterator.hasNext(); ) {
-            UserSkill userSkill = iterator.next();
-
-            if (userSkill.getUser().equals(this) &&
-                    userSkill.getSkill().equals(skill)) {
-                iterator.remove();
-                userSkill.getSkill().getUsers().remove(userSkill);
-                userSkill.setUser(null);
-                userSkill.setSkill(null);
-            }
-        }
-    }
 
 
 

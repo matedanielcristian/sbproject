@@ -3,13 +3,14 @@ package com.internship.sbproject1.controller;
 import com.internship.sbproject1.dto.RequestUserDto;
 import com.internship.sbproject1.dto.ResponseUserDto;
 import com.internship.sbproject1.entity.User;
-import com.internship.sbproject1.entity.UserSkill;
 import com.internship.sbproject1.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 import java.util.List;
 
 @CrossOrigin
@@ -23,44 +24,35 @@ public class UserController {
     }
 
     @GetMapping
-    public Page<User> getUsers(@RequestParam(defaultValue = "0") Integer page,
-                               @RequestParam(defaultValue = "10") Integer size,
-                               @RequestParam(defaultValue = "id") String sortOrder
+    public ResponseEntity<Page<User>> getUsers(@RequestParam(defaultValue = "0") @Valid Integer pageNo,
+                                               @RequestParam(defaultValue = "10") @Valid Integer pageSize,
+                                               @RequestParam(defaultValue = "id") @Valid String sortBy
     ) {
-        return userService.getUsers(page, size, sortOrder);
+        Page<User> result =  userService.getUsers(pageNo, pageSize, sortBy);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping(path = "{userId}")
-    public ResponseUserDto getUserById(@PathVariable("userId") Long userId) {
-        return  userService.findUserById(userId);
+    public  ResponseEntity<ResponseUserDto> getUserById(@PathVariable("userId") @Valid Long userId) {
+        ResponseUserDto result = userService.findUserById(userId);
+        return  ResponseEntity.ok(result);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseUserDto saveUser(@RequestBody @Valid RequestUserDto user) {
-        return userService.saveUser(user);
+    public ResponseEntity<ResponseUserDto> saveUser(@RequestBody @Valid RequestUserDto user) {
+        ResponseUserDto result = userService.saveUser(user);
+        return ResponseEntity.ok(result);
     }
-
 
     @PutMapping(path = "{userId}")
-    public ResponseUserDto updateUser(@PathVariable("userId") Long userId, @RequestBody @Valid RequestUserDto userToUpdate) {
-        return userService.updateUser(userId,  userToUpdate.getFullName(),  userToUpdate.getEmail(), userToUpdate.getGender(), userToUpdate.getUserRole());
+    public ResponseEntity<ResponseUserDto>updateUser(@PathVariable("userId") @Valid Long userId, @RequestBody @Valid RequestUserDto userToUpdate) {
+        ResponseUserDto result  = userService.updateUser(userId,  userToUpdate);
+        return ResponseEntity.ok(result);
     }
 
-
-//    @GetMapping(path = "{userId}/skills")
-//    public List<UserSkill> getUserSkills(@PathVariable("userId") Long userId) {
-//        return userService.getUserSkills(userId);
-//    }
-
-//    @PostMapping(path = "{userId}/skills/{skillId}")
-//    public User addSkillToUser(@PathVariable("userId") Long userId, @PathVariable("userId") Long skillId) {
-//        return  userService.addSkillToUser(userId, skillId);
-//    }
-
     @DeleteMapping(path = "{userId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deleteStudent(@PathVariable("userId") Long userId) {
-        userService.deleteUser(userId);
+    public ResponseEntity<Boolean> deleteStudent(@PathVariable("userId") @Valid Long userId) {
+        Boolean result = userService.deleteUser(userId);
+        return ResponseEntity.ok(result);
     }
 }

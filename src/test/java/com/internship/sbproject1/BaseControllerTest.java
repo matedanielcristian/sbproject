@@ -1,4 +1,4 @@
-package com.internship.sbproject1.controller;
+package com.internship.sbproject1;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-public  abstract  class UserControllerTest {
+public  abstract  class BaseControllerTest {
     protected MockMvc mockMvc;
 
     @BeforeEach

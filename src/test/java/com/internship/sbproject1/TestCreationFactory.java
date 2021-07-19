@@ -4,26 +4,45 @@ import com.internship.sbproject1.dto.RequestUserDto;
 import com.internship.sbproject1.dto.ResponseUserDto;
 import com.internship.sbproject1.entity.User;
 import com.internship.sbproject1.entity.UserRole;
+import org.apache.commons.lang3.RandomStringUtils;
 
-public abstract class UsersBase {
-    public Long id = 1L;
-    public Integer gender = 1;
-    public RequestUserDto requestUserDto;
+import java.security.SecureRandom;
+import java.util.Random;
+public abstract class TestCreationFactory {
+    private Random random = new Random();
+    private Long id =  1L;
+    private String email = "test@test.com";
+    private String fullName = "Test FullName";
+    private UserRole userRole = UserRole.USER;
+    private int gender = 1;
+    private String password = "123456";
 
-    {
-        requestUserDto = new RequestUserDto(id, "Mate Daniel", "test@test.com", gender, UserRole.USER, "123456");
+
+    public ResponseUserDto getResponseUserDto() {
+        return new ResponseUserDto(id, fullName, email, userRole, gender);
     }
 
-    public User user;
-
-    {
-        user = new User(id, requestUserDto.getFullName(), requestUserDto.getEmail(), requestUserDto.getPassword(), requestUserDto.getUserRole(), requestUserDto.getGender());
+    public RequestUserDto getRequestUserDto() {
+        return new RequestUserDto(id, fullName, email, UserRole.USER, 1, password);
     }
 
-    public ResponseUserDto responseUserDto;
-
-    {
-        responseUserDto = new ResponseUserDto(id, user.getFullName(), user.getEmail(), user.getGender(), user.getUserRole());
+    public User getUser() {
+        return new User(id, fullName, email,userRole, 1, password);
     }
+
+
+    public ResponseUserDto randomResponseUserDto() {
+        return new ResponseUserDto((long) random.nextInt(), RandomStringUtils.randomAlphabetic(10) , RandomStringUtils.randomAlphabetic(10), UserRole.USER, random.nextInt(2));
+    }
+
+    public RequestUserDto randomRequestUserDto() {
+        return new RequestUserDto((long) random.nextInt(), RandomStringUtils.randomAlphabetic(10) , RandomStringUtils.randomAlphabetic(10), UserRole.USER, random.nextInt(2), RandomStringUtils.randomAlphabetic(10));
+    }
+
+    public User randomUser() {
+        return new User((long) random.nextInt(), RandomStringUtils.randomAlphabetic(10) , RandomStringUtils.randomAlphabetic(10), UserRole.USER, random.nextInt(2), RandomStringUtils.randomAlphabetic(10));
+    }
+
+
 
 }
